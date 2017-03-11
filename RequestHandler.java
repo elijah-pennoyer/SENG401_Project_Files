@@ -1,18 +1,14 @@
-import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 
 /**
@@ -33,7 +29,66 @@ public class RequestHandler {
 		
 		String parameters = "?type=" + type + "&";
 		if(type.equals("all")){
-
+			List<String> latList = queryParameters.get("lat");
+			List<String> longList = queryParameters.get("long");
+			List<String> aceList = queryParameters.get("ace");
+			List<String> archiveList = queryParameters.get("archive");
+			List<String> forecastList = queryParameters.get("forecast");
+			List<String> imagesList = queryParameters.get("images");
+			List<String> probabilityList = queryParameters.get("probability");
+			List<String> threedayList = queryParameters.get("threeday");
+			List<String> twentysevendayList = queryParameters.get("twentysevenday");
+			List<String> weatherList = queryParameters.get("weather");
+			if(latList != null && !latList.isEmpty()){
+				parameters += "lat=";
+				parameters += latList.get(latList.size()-1);
+				parameters += "&";
+			}
+			if(longList != null && !longList.isEmpty()){
+				parameters += "long=";
+				parameters += longList.get(longList.size()-1);
+				parameters += "&";
+			}
+			if(aceList != null && !aceList.isEmpty()){
+				parameters += "ace=";
+				parameters += aceList.get(aceList.size()-1);
+				parameters += "&";
+			}
+			if(archiveList != null && !archiveList.isEmpty()){
+				parameters += "archive=";
+				parameters += archiveList.get(archiveList.size()-1);
+				parameters += "&";
+			}
+			if(forecastList != null && !forecastList.isEmpty()){
+				parameters += "forecast=";
+				parameters += forecastList.get(forecastList.size()-1);
+				parameters += "&";
+			}
+			if(imagesList != null && !imagesList.isEmpty()){
+				parameters += "images=";
+				parameters += imagesList.get(imagesList.size()-1);
+				parameters += "&";
+			}
+			if(probabilityList != null && !probabilityList.isEmpty()){
+				parameters += "probability=";
+				parameters += probabilityList.get(probabilityList.size()-1);
+				parameters += "&";
+			}
+			if(threedayList != null && !threedayList.isEmpty()){
+				parameters += "threeday=";
+				parameters += threedayList.get(threedayList.size()-1);
+				parameters += "&";
+			}
+			if(twentysevendayList != null && !twentysevendayList.isEmpty()){
+				parameters += "twentysevenday=";
+				parameters += twentysevendayList.get(twentysevendayList.size()-1);
+				parameters += "&";
+			}
+			if(weatherList != null && !weatherList.isEmpty()){
+				parameters += "weather=";
+				parameters += weatherList.get(weatherList.size()-1);
+				parameters += "&";
+			}
 		}
 		else if(type.equals("ace")){
 			List<String> dataList = queryParameters.get("data");
@@ -55,10 +110,42 @@ public class RequestHandler {
 			}
 		}
 		else if(type.equals("archive")){
-			
+			List<String> actionList = queryParameters.get("action");
+			List<String> startList = queryParameters.get("start");
+			List<String> endList = queryParameters.get("end");
+			if(actionList != null && !actionList.isEmpty()){
+				parameters += "action=";
+				parameters += actionList.get(actionList.size()-1);
+				parameters += "&";
+			}
+			if(startList != null && !startList.isEmpty()){
+				parameters += "start=";
+				parameters += startList.get(startList.size()-1);
+				parameters += "&";
+			}
+			if(endList != null && !endList.isEmpty()){
+				parameters += "end=";
+				parameters += endList.get(endList.size()-1);
+			}
 		}
 		else if(type.equals("embed")){
-			
+			List<String> imageList = queryParameters.get("image");
+			List<String> latList = queryParameters.get("lat");
+			List<String> longList = queryParameters.get("long");
+			if(imageList != null && !imageList.isEmpty()){
+				parameters += "image=";
+				parameters += imageList.get(imageList.size()-1);
+				parameters += "&";
+			}
+			if(latList != null && !latList.isEmpty()){
+				parameters += "lat=";
+				parameters += latList.get(latList.size()-1);
+				parameters += "&";
+			}
+			if(longList != null && !longList.isEmpty()){
+				parameters += "long=";
+				parameters += longList.get(longList.size()-1);
+			}
 		}
 		else if(type.equals("images")){
 			//Get the lists of input parameters
@@ -79,11 +166,24 @@ public class RequestHandler {
 				parameters += imageList.get(imageList.size()-1);
 			}
 		}
-		else if(type.equals("locations")){
-			
-		}
 		else if(type.equals("weather")){
-			
+			List<String> latList = queryParameters.get("lat");
+			List<String> longList = queryParameters.get("long");
+			List<String> forecastList = queryParameters.get("forecast");
+			if(latList != null && !latList.isEmpty()){
+				parameters += "lat=";
+				parameters += latList.get(latList.size()-1);
+				parameters += "&";
+			}
+			if(longList != null && !longList.isEmpty()){
+				parameters += "long=";
+				parameters += longList.get(longList.size()-1);
+			}
+			if(forecastList != null && !forecastList.isEmpty()){
+				parameters += "image=";
+				parameters += forecastList.get(forecastList.size()-1);
+				parameters += "&";
+			}
 		}
 		else if(type.equals("map")){
 			

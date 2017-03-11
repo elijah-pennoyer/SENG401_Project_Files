@@ -1,9 +1,16 @@
+import java.util.HashMap;
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,38 +22,57 @@ import org.json.JSONObject;
 @Path ("/")
 public class RequestHandler {
 	
-//	@Path ("{URI}")
-//	@GET
-//	@Produces ("application/json")
-//	public Response handleRequest(@PathParam ("URI") String URI) throws JSONException{
-//		JSONObject jsonObject = new JSONObject();
-//		//pass uri to data controller
-//		//jsonObject = DataController.foo(URI);
-//		//String result = jsonObject.toString();
-//		//return Response.status(200).entity(result).build();
-//		return DataController.foo(URI);
-//		
-//	}
-	
-	@Path("")
-	@QueryParam("type=location")
+	@Path ("")
 	@GET
-	@Produces("application/json")
-	public Response helloUser(@QueryParam("data") String data) throws JSONException {
-	JSONObject jsonObject = new JSONObject();
-	jsonObject.put("Message", "Hello " + data + "!");
-	String result = jsonObject.toString();
-	return Response.status(200).entity(result).build();
-	}
-	
-	@QueryParam("type=not")
-	@GET
-	@Produces("application/json")
-	public Response hello(@QueryParam("data") String data) throws JSONException {
-	JSONObject jsonObject = new JSONObject();
-	jsonObject.put("Message", "Hello " + data + "!");
-	String result = jsonObject.toString();
-	return Response.status(200).entity(result).build();
+	@Produces ("application/json")
+	public Response handleRequest(@Context UriInfo uriInfo) throws JSONException{
+		
+		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+		List<String> typeList = queryParameters.get("type");
+		String type = typeList.get(typeList.size()-1);
+		
+		String parameters = "?type=" + type + "&";
+		if(type.equals("all")){
+
+		}
+		else if(type.equals("ace")){
+			List<String> dataList = queryParameters.get("data");
+			List<String> latList = queryParameters.get("lat");
+			List<String> longList = queryParameters.get("long");
+			if(dataList != null && !dataList.isEmpty()){
+				parameters += "data=";
+				parameters += dataList.get(dataList.size()-1);
+				parameters += "&";
+			}
+			if(latList != null && !latList.isEmpty()){
+				parameters += "lat=";
+				parameters += latList.get(latList.size()-1);
+				parameters += "&";
+			}
+			if(longList != null && !longList.isEmpty()){
+				parameters += "long=";
+				parameters += longList.get(longList.size()-1);
+			}
+		}
+		else if(type.equals("archive")){
+			
+		}
+		else if(type.equals("embed")){
+			
+		}
+		else if(type.equals("images")){
+			
+		}
+		else if(type.equals("locations")){
+			
+		}
+		else if(type.equals("weather")){
+			
+		}
+		else if(type.equals("map")){
+			
+		}
+		return DataController.foo(parameters);
 	}
 	
 

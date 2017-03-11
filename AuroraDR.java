@@ -4,12 +4,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import org.json.JSONException;
 
 /**
  * receive uri from data controller. send http request to aurora api. receive api response.
@@ -20,9 +15,9 @@ public class AuroraDR {
 
 	public static Response bar(String URI) throws UnirestException{
 		JSONObject jsonObject = new JSONObject();
-		System.out.println("http://api.auroras.live/" + URI);
+		System.out.println("http://api.auroras.live/v1/" + URI);
 		HttpResponse<JsonNode> response =
-		Unirest.get("http://api.auroras.live/" + URI)
+		Unirest.get("http://api.auroras.live/v1/" + URI)
 		 .header("cookie", "PHPSESSID=MW2MMg7reEHx0vQPXaKen0")
 		 .asJson();
 		jsonObject = response.getBody().getObject();

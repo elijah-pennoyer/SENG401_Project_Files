@@ -2,6 +2,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,16 +15,39 @@ import org.json.JSONObject;
 @Path ("/")
 public class RequestHandler {
 	
-	@Path ("{URI}")
+//	@Path ("{URI}")
+//	@GET
+//	@Produces ("application/json")
+//	public Response handleRequest(@PathParam ("URI") String URI) throws JSONException{
+//		JSONObject jsonObject = new JSONObject();
+//		//pass uri to data controller
+//		//jsonObject = DataController.foo(URI);
+//		//String result = jsonObject.toString();
+//		//return Response.status(200).entity(result).build();
+//		return DataController.foo(URI);
+//		
+//	}
+	
+	@Path("")
+	@QueryParam("type=location")
 	@GET
-	@Produces ("application/json")
-	public Response handleRequest(@PathParam ("URI") String URI) throws JSONException{
-		JSONObject jsonObject = new JSONObject();
-		//pass uri to data controller
-		//jsonObject = DataController.foo(URI);
-		//String result = jsonObject.toString();
-		//return Response.status(200).entity(result).build();
-		return DataController.foo(URI);
-		
+	@Produces("application/json")
+	public Response helloUser(@QueryParam("data") String data) throws JSONException {
+	JSONObject jsonObject = new JSONObject();
+	jsonObject.put("Message", "Hello " + data + "!");
+	String result = jsonObject.toString();
+	return Response.status(200).entity(result).build();
 	}
+	
+	@QueryParam("type=not")
+	@GET
+	@Produces("application/json")
+	public Response hello(@QueryParam("data") String data) throws JSONException {
+	JSONObject jsonObject = new JSONObject();
+	jsonObject.put("Message", "Hello " + data + "!");
+	String result = jsonObject.toString();
+	return Response.status(200).entity(result).build();
+	}
+	
+
 }

@@ -20,9 +20,9 @@ public class AuroraDR {
 
 	public static Response bar(String URI) throws UnirestException{
 		JSONObject jsonObject = new JSONObject();
-		System.out.println("http://api.auroras.live/v1/" + URI);
+		System.out.println("http://api.auroras.live/" + URI);
 		HttpResponse<JsonNode> response =
-		Unirest.get("http://api.auroras.live/v1/" + URI)
+		Unirest.get("http://api.auroras.live/" + URI)
 		 .header("cookie", "PHPSESSID=MW2MMg7reEHx0vQPXaKen0")
 		 .asJson();
 		jsonObject = response.getBody().getObject();

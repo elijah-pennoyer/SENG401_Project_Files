@@ -148,7 +148,23 @@ public class RequestHandler {
 			}
 		}
 		else if(type.equals("images")){
+			//Get the lists of input parameters
+			List<String> actionList = queryParameters.get("action");
+			List<String> imageList = queryParameters.get("image");
 			
+			//If the actionList is not null or empty:
+			if(actionList != null && !actionList.isEmpty()){
+				//Add action=[parameter] to the parameters string
+				parameters += "action=";
+				parameters += actionList.get(actionList.size()-1);
+				parameters += "&";
+			}
+			//If the imageList is not null or empty
+			if(imageList != null && !imageList.isEmpty()){
+				//Add image=[parameter] to the parameters string
+				parameters += "image=";
+				parameters += imageList.get(imageList.size()-1);
+			}
 		}
 		else if(type.equals("weather")){
 			List<String> latList = queryParameters.get("lat");
@@ -170,6 +186,7 @@ public class RequestHandler {
 			}
 		}
 		else if(type.equals("map")){
+			
 			
 		}
 		return DataController.foo(parameters);

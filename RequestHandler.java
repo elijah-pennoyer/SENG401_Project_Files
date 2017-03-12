@@ -1,5 +1,4 @@
 import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -7,8 +6,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 
 /**
@@ -165,6 +166,12 @@ public class RequestHandler {
 				parameters += "image=";
 				parameters += imageList.get(imageList.size()-1);
 			}
+			try {
+				return AuroraDR.foo(parameters);
+			} catch (UnirestException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(type.equals("weather")){
 			List<String> latList = queryParameters.get("lat");
@@ -186,8 +193,18 @@ public class RequestHandler {
 			}
 		}
 		else if(type.equals("map")){
-			
-			
+			List<String> idList = queryParameters.get("id");
+			if(idList != null && !idList.isEmpty()){
+				parameters += "id=";
+				parameters += idList.get(idList.size()-1);
+			}
+			else{
+				//return a json object explaining to the user that it is NOT ok to not provide a location id
+				JSONObject jsonObject = new JSONObject();
+				String att = "Powered by Auroras.live";
+				jsonObject.put("Attribution", att);
+				return Response.status(200).entity(jsonObject.toString()).build();
+			}
 		}
 		return DataController.foo(parameters);
 	}

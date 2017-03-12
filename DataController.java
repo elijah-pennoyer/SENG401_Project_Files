@@ -1,7 +1,4 @@
 import javax.ws.rs.core.Response;
-
-import org.json.JSONObject;
-
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
@@ -14,7 +11,6 @@ public class DataController {
 		try {
 			return AuroraDR.bar(URI);
 		} catch (UnirestException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

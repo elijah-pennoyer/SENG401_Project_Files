@@ -45,33 +45,13 @@ public class RequestHandler {
 			parameters = embedRequestHandler(queryParameters, parameters);
 		}
 		else if(type.equals("images")){
-<<<<<<< HEAD
-			//Get the lists of input parameters
-			List<String> actionList = queryParameters.get("action");
-			List<String> imageList = queryParameters.get("image");
-			
-			//If the actionList is not null or empty:
-			if(actionList != null && !actionList.isEmpty()){
-				//Add action=[parameter] to the parameters string
-				parameters += "action=";
-				parameters += actionList.get(actionList.size()-1);
-				parameters += "&";
-			}
-			//If the imageList is not null or empty
-			if(imageList != null && !imageList.isEmpty()){
-				//Add image=[parameter] to the parameters string
-				parameters += "image=";
-				parameters += imageList.get(imageList.size()-1);
-			}
+			parameters = imagesRequestHandler(queryParameters, parameters);
 			try {
 				return AuroraDR.foo(parameters);
 			} catch (UnirestException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-=======
-			parameters = imagesRequestHandler(queryParameters, parameters);
->>>>>>> refs/remotes/origin/master
 		}
 		else if(type.equals("weather")){
 			parameters = weatherRequestHandler(queryParameters, parameters);

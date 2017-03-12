@@ -31,6 +31,7 @@ public class RequestHandler {
 		//Create the parameters String, which will be used to get data from the Auroras.live API
 		String parameters = "?type=" + type + "&";
 		
+		//Call function to update the parameters string based on the selected type. 
 		if(type.equals("all")){
 			parameters = allRequestHandler(queryParameters, parameters);
 		}
@@ -42,7 +43,6 @@ public class RequestHandler {
 		}
 		else if(type.equals("embed")){
 			parameters = embedRequestHandler(queryParameters, parameters);
-			
 		}
 		else if(type.equals("images")){
 <<<<<<< HEAD
@@ -90,6 +90,9 @@ public class RequestHandler {
 				return Response.status(200).entity(jsonObject.toString()).build();
 			}
 		}
+		
+		//Call DataController.foo to retrieve the data, either from the Database 
+		//or by making a request to an API if the data isn't in the Database.
 		return DataController.foo(parameters);
 	}
 	

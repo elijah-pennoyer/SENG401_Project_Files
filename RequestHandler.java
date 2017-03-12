@@ -1,5 +1,4 @@
 import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -7,8 +6,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 
 /**
@@ -44,14 +45,50 @@ public class RequestHandler {
 			
 		}
 		else if(type.equals("images")){
+<<<<<<< HEAD
+			//Get the lists of input parameters
+			List<String> actionList = queryParameters.get("action");
+			List<String> imageList = queryParameters.get("image");
+			
+			//If the actionList is not null or empty:
+			if(actionList != null && !actionList.isEmpty()){
+				//Add action=[parameter] to the parameters string
+				parameters += "action=";
+				parameters += actionList.get(actionList.size()-1);
+				parameters += "&";
+			}
+			//If the imageList is not null or empty
+			if(imageList != null && !imageList.isEmpty()){
+				//Add image=[parameter] to the parameters string
+				parameters += "image=";
+				parameters += imageList.get(imageList.size()-1);
+			}
+			try {
+				return AuroraDR.foo(parameters);
+			} catch (UnirestException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+=======
 			parameters = imagesRequestHandler(queryParameters, parameters);
+>>>>>>> refs/remotes/origin/master
 		}
 		else if(type.equals("weather")){
 			parameters = weatherRequestHandler(queryParameters, parameters);
 		}
 		else if(type.equals("map")){
-			
-			
+			List<String> idList = queryParameters.get("id");
+			if(idList != null && !idList.isEmpty()){
+				parameters += "id=";
+				parameters += idList.get(idList.size()-1);
+			}
+			else{
+				//return a json object explaining to the user that it is NOT ok to not provide a location id
+				JSONObject jsonObject = new JSONObject();
+				String att = "Powered by Auroras.live";
+				jsonObject.put("Attribution", att);
+				return Response.status(200).entity(jsonObject.toString()).build();
+			}
 		}
 		return DataController.foo(parameters);
 	}

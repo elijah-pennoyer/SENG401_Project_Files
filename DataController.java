@@ -7,12 +7,16 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  */
 public class DataController {
 
-	public static Response foo(String URI){
+	public static Response retreiveJson(String URI){
 		try {
-			return AuroraDR.bar(URI);
+			return AuroraDR.jsonRetreiver(URI);
 		} catch (UnirestException e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+	
+	public static Response retreiveImage(String URI){
 		return null;
 	}
 }

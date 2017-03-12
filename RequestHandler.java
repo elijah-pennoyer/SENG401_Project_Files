@@ -9,9 +9,6 @@ import javax.ws.rs.core.UriInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
-
-
 /**
  * Have functions for api module, will just "pass" the uri to the data controller
  * returns a json object.
@@ -46,12 +43,7 @@ public class RequestHandler {
 		}
 		else if(type.equals("images")){
 			parameters = imagesRequestHandler(queryParameters, parameters);
-			try {
-				return AuroraDR.foo(parameters);
-			} catch (UnirestException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			return DataController.retreiveImage(parameters);
 		}
 		else if(type.equals("weather")){
 			parameters = weatherRequestHandler(queryParameters, parameters);
@@ -63,7 +55,7 @@ public class RequestHandler {
 				parameters += idList.get(idList.size()-1);
 			}
 			else{
-				//return a json object explaining to the user that it is NOT ok to not provide a location id
+				//TODO: return a json object explaining to the user that it is NOT ok to not provide a location id
 				JSONObject jsonObject = new JSONObject();
 				String att = "Powered by Auroras.live";
 				jsonObject.put("Attribution", att);
@@ -73,7 +65,7 @@ public class RequestHandler {
 		
 		//Call DataController.foo to retrieve the data, either from the Database 
 		//or by making a request to an API if the data isn't in the Database.
-		return DataController.foo(parameters);
+		return DataController.retreiveJson(parameters);
 	}
 	
 	/**

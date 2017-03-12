@@ -1,9 +1,9 @@
+import org.json.JSONArray;
 import org.json.JSONObject;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-
 import java.io.InputStream;
 
 import javax.ws.rs.core.Response;
@@ -15,24 +15,22 @@ import javax.ws.rs.core.Response;
  */
 public class AuroraDR {
 
-	public static Response bar(String URI) throws UnirestException{
-		JSONObject jsonObject = new JSONObject();
+	public static Response jsonRetreiver(String URI) throws UnirestException{
+		JSONArray jsonObject = new JSONArray();
 		HttpResponse<JsonNode> response =
 		Unirest.get("http://api.auroras.live/v1/" + URI)
 		 .header("cookie", "PHPSESSID=MW2MMg7reEHx0vQPXaKen0")
 		 .asJson();
-		jsonObject = response.getBody().getObject();
+		jsonObject = response.getBody().getArray();
 		String att = "Powered by Auroras.live";
-		jsonObject.put("Attribution", att);
+		jsonObject.getJSONObject(jsonObject.length()-1).put("Attribution", att);
 		return Response.status(200).entity(response.getBody().toString()).build();
-
 	}
 	
-	public static Response foo(String URI) throws UnirestException{
+	public static Response imageretreiver(String URI) throws UnirestException{
 		HttpResponse<InputStream> response =
 		Unirest.get("http://api.auroras.live/v1/" + URI)
 		 .header("cookie", "PHPSESSID=MW2MMg7reEHx0vQPXaKen0").asBinary();
 		return Response.status(200).entity(response.getBody()).build();
-
 	}
 }

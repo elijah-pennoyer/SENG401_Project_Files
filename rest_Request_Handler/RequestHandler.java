@@ -1,3 +1,4 @@
+package rest_Request_Handler;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -6,20 +7,25 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Have functions for api module, will just "pass" the uri to the data controller
  * returns a json object.
+ * 
  */
 @Path ("/")
-public class RequestHandler {
+public class RequestHandler{
 	
+	/**
+	 * Parses the URI of an HTTP request and returns the appropriate Auroras.live JSON object or image
+	 * @param uriInfo - A multivalued map containing all of the URI's parameters
+	 * @return Either a JSON object or an image, depending on the user request
+	 */
 	@Path ("")
 	@GET
 	@Produces ("application/json")
-	public Response handleRequest(@Context UriInfo uriInfo) throws JSONException{
+	public Response handleRequest(@Context UriInfo uriInfo){
 		
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		List<String> typeList = queryParameters.get("type");
@@ -43,7 +49,7 @@ public class RequestHandler {
 		}
 		else if(type.equals("images")){
 			parameters = imagesRequestHandler(queryParameters, parameters);
-			return DataController.retreiveImage(parameters);
+			return cache_Controller.DataController.retreiveImage(parameters);
 		}
 		else if(type.equals("weather")){
 			parameters = weatherRequestHandler(queryParameters, parameters);
@@ -55,17 +61,22 @@ public class RequestHandler {
 				parameters += idList.get(idList.size()-1);
 			}
 			else{
-				//TODO: return a json object explaining to the user that it is NOT ok to not provide a location id
+				//TODO: maybe make this in order
+				//return a json object explaining to the user that it is NOT ok to not provide a location id
 				JSONObject jsonObject = new JSONObject();
-				String att = "Powered by Auroras.live";
-				jsonObject.put("Attribution", att);
+				String module = "Map";
+				jsonObject.put("module", module);
+				String message = "Parameter is missing from request: id";
+				jsonObject.put("message", message);
+				int status = 404;
+				jsonObject.put("statuscode", status);
 				return Response.status(200).entity(jsonObject.toString()).build();
 			}
 		}
 		
 		//Call DataController.foo to retrieve the data, either from the Database 
 		//or by making a request to an API if the data isn't in the Database.
-		return DataController.retreiveJson(parameters);
+		return cache_Controller.DataController.retreiveJson(parameters);
 	}
 	
 	/**

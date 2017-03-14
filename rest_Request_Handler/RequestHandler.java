@@ -24,7 +24,7 @@ public class RequestHandler{
 	 */
 	@Path ("")
 	@GET
-	@Produces ("application/json")
+	@Produces("text/plain")
 	public Response handleRequest(@Context UriInfo uriInfo){
 		
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
@@ -49,7 +49,6 @@ public class RequestHandler{
 		}
 		else if(type.equals("images")){
 			parameters = imagesRequestHandler(queryParameters, parameters);
-			return cache_Controller.DataController.retreiveImage(parameters);
 		}
 		else if(type.equals("weather")){
 			parameters = weatherRequestHandler(queryParameters, parameters);
@@ -72,11 +71,12 @@ public class RequestHandler{
 				jsonObject.put("statuscode", status);
 				return Response.status(200).entity(jsonObject.toString()).build();
 			}
+			return cache_Controller.DataController.retreiveMap(idList.get(idList.size()-1));
 		}
 		
 		//Call DataController.foo to retrieve the data, either from the Database 
 		//or by making a request to an API if the data isn't in the Database.
-		return cache_Controller.DataController.retreiveJson(parameters);
+		return cache_Controller.DataController.retrieveAurora(parameters);
 	}
 	
 	/**

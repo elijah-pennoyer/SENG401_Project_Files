@@ -1,4 +1,4 @@
-package rest_Data_Retreiver;
+package rest_Data_Retriever;
 
 import org.json.JSONArray;
 import com.mashape.unirest.http.HttpResponse;
@@ -16,6 +16,12 @@ import javax.ws.rs.core.Response;
  */
 public class AuroraDR {
 
+	/**
+	 * @deprecated no longer needed or used, delete once auroraAPIRetriever is confirmed working
+	 * @param URI
+	 * @return
+	 * @throws UnirestException
+	 */
 	public static Response jsonRetriever(String URI) throws UnirestException{
 		JSONArray jsonArray = new JSONArray();
 		HttpResponse<JsonNode> response =
@@ -28,7 +34,13 @@ public class AuroraDR {
 		return Response.status(200).entity(response.getBody().toString()).build();
 	}
 	
-	public static Response imageRetriever(String URI) throws UnirestException{
+	/**
+	 * Retrieves the requested information from auroras.live APIs
+	 * @param URI Query parameters needed in retrieving the desired object
+	 * @return auroras.live API response
+	 * @throws UnirestException If there was an error when sending the http request to auroras.live
+	 */
+	public static Response auroraAPIRetriever(String URI) throws UnirestException{
 		HttpResponse<InputStream> response =
 		Unirest.get("http://api.auroras.live/v1/" + URI)
 		 .header("cookie", "PHPSESSID=MW2MMg7reEHx0vQPXaKen0").asBinary();

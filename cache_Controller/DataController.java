@@ -8,19 +8,10 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  * receives json object (http response) from auroraDR. passes json object back to request handler.
  */
 public class DataController {
-
-	public static Response retreiveJson(String URI){
-		try {
-			return rest_Data_Retreiver.AuroraDR.jsonRetriever(URI);
-		} catch (UnirestException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 	
-	public static Response retreiveImage(String URI){
+	public static Response retrieveAurora(String URI){
 		try {
-			return rest_Data_Retreiver.AuroraDR.imageRetriever(URI);
+			return rest_Data_Retriever.AuroraDR.auroraAPIRetriever(URI);
 		} catch (UnirestException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -28,9 +19,9 @@ public class DataController {
 		return null;
 	}
 	
-	public static Response retreiveMap(String URI){
+	public static Response retreiveMap(String Location){
 		try {
-			return rest_Data_Retreiver.GoogleDR.imageRetriever(URI);
+			return rest_Data_Retriever.GoogleDR.googleAPIRetriever(Location);
 		} catch (UnirestException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,5 +1,6 @@
 package cache_Controller;
 
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -9,9 +10,20 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  */
 public class DataController {
 	
-	public static Response retrieveAurora(String URI){
+	public static Response retrieveAuroraImage(String URI){
 		try {
-			return rest_Data_Retriever.AuroraDR.auroraAPIRetriever(URI);
+			return rest_Data_Retriever.AuroraDR.auroraAPI_ImageRetriever(URI);
+		} catch (UnirestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Produces("application/json")
+	public static Response retrieveAuroraJSON(String URI){
+		try {
+			return rest_Data_Retriever.AuroraDR.auroraAPI_JSONRetriever(URI);
 		} catch (UnirestException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

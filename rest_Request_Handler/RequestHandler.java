@@ -48,7 +48,8 @@ public class RequestHandler{
 			parameters = embedRequestHandler(queryParameters, parameters);
 		}
 		else if(type.equals("images")){
-			parameters = imagesRequestHandler(queryParameters, parameters);
+			//parameters = imagesRequestHandler(queryParameters, parameters);
+			return imagesRequestHandler(queryParameters, parameters);
 		}
 		else if(type.equals("weather")){
 			parameters = weatherRequestHandler(queryParameters, parameters);
@@ -76,7 +77,7 @@ public class RequestHandler{
 		
 		//Call DataController.foo to retrieve the data, either from the Database 
 		//or by making a request to an API if the data isn't in the Database.
-		return cache_Controller.DataController.retrieveAurora(parameters);
+		return cache_Controller.DataController.retrieveAuroraImage(parameters);
 	}
 	
 	/**
@@ -260,7 +261,7 @@ public class RequestHandler{
 	 * @param parameters the string to add parameters too
 	 * @return the updated parameters string
 	 */
-	private String imagesRequestHandler(MultivaluedMap<String, String> queryParameters, String parameters){
+	private Response imagesRequestHandler(MultivaluedMap<String, String> queryParameters, String parameters){
 		//Get the lists of input parameters, in case there are multiple instances of a parameter.
 		List<String> actionList = queryParameters.get("action");
 		List<String> imageList = queryParameters.get("image");
@@ -271,14 +272,22 @@ public class RequestHandler{
 		if(actionList != null && !actionList.isEmpty()){
 			parameters += "action=";
 			parameters += actionList.get(actionList.size()-1);
-			parameters += "&";
+			return requestJSONForImages(parameters);
 		}
 		if(imageList != null && !imageList.isEmpty()){
 			parameters += "image=";
 			parameters += imageList.get(imageList.size()-1);
+			return requestImageForImages(parameters);
 		}
-		
-		return parameters;
+		return requestJSONForImages(parameters);
+	}
+	
+	private Response requestImageForImages(String parameters){
+		return cache_Controller.DataController.retrieveAuroraImage(parameters);
+	}
+	
+	private Response requestJSONForImages(String parameters){
+		return cache_Controller.DataController.retrieveAuroraJSON(parameters);
 	}
 	
 	/**

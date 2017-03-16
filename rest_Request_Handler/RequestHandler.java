@@ -1,4 +1,5 @@
 package rest_Request_Handler;
+
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -7,6 +8,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
 import org.json.JSONObject;
 
 /**
@@ -24,9 +26,8 @@ public class RequestHandler{
 	 */
 	@Path ("")
 	@GET
-	@Produces("text/plain")
+	@Produces({"application/json", "image/jpeg"})
 	public Response handleRequest(@Context UriInfo uriInfo){
-		
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
 		List<String> typeList = queryParameters.get("type");
 		String type = typeList.get(typeList.size()-1);
@@ -77,7 +78,7 @@ public class RequestHandler{
 		
 		//Call DataController.foo to retrieve the data, either from the Database 
 		//or by making a request to an API if the data isn't in the Database.
-		return cache_Controller.DataController.retrieveAuroraImage(parameters);
+		return cache_Controller.DataController.retrieveAuroraJSON(parameters);
 	}
 	
 	/**

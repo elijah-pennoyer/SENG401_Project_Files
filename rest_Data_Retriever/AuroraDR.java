@@ -54,7 +54,6 @@ public class AuroraDR {
 	 * @return auroras.live API response
 	 * @throws UnirestException If there was an error when sending the http request to auroras.live
 	 */
-	@Produces("application/json")
 	public static Response auroraAPI_JSONRetriever(String URI) throws UnirestException{
 		JSONArray jsonArray = new JSONArray();
 		HttpResponse<JsonNode> response =

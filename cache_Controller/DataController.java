@@ -20,7 +20,6 @@ public class DataController {
 		return null;
 	}
 	
-	@Produces("application/json")
 	public static Response retrieveAuroraJSON(String URI){
 		try {
 			return rest_Data_Retriever.AuroraDR.auroraAPI_JSONRetriever(URI);

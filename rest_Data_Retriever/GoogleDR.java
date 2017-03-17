@@ -46,7 +46,7 @@ public class GoogleDR {
 			jsonObject.put("message", message);
 			int status = 404;
 			jsonObject.put("statuscode", status);
-			return Response.status(404).type("application/json").entity(jsonObject.toString()).build();
+			return Response.status(404).entity(jsonObject.toString()).build();
 		}
 
 		//Create string for latitude and longitue positions
@@ -57,7 +57,7 @@ public class GoogleDR {
 		HttpResponse<InputStream> response =
 		Unirest.get("https://maps.googleapis.com/maps/api/staticmap?center=" + latLongString + markerString + "&zoom=13&size=1920x10800&key=AIzaSyBTQ67ylZO2ayd8rH_c1rzDkDlf2QoQTBs")
 		 .header("cookie", "PHPSESSID=MW2MMg7reEHx0vQPXaKen0").asBinary();
-		return Response.status(200).type("image/jpeg").entity(response.getBody()).build();
+		return Response.status(200).entity(response.getBody()).build();
 	}
 	
 	

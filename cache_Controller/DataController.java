@@ -1,7 +1,7 @@
 package cache_Controller;
 
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
@@ -20,6 +20,7 @@ public class DataController {
 		return null;
 	}
 	
+	//@Produces("application/json")
 	public static Response retrieveAuroraJSON(String URI){
 		try {
 			return rest_Data_Retriever.AuroraDR.auroraAPI_JSONRetriever(URI);

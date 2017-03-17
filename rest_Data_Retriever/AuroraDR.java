@@ -13,29 +13,10 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
- * receive uri from data controller. send http request to aurora api. receive api response.
- * sends response back to data controller.
- *
+ * Receives URI from DataController. Sends HTTP request to Aurora API. Receives API response.
+ * Sends response back to DataController.
  */
 public class AuroraDR {
-
-	/**
-	 * @deprecated no longer needed or used, delete once auroraAPIRetriever is confirmed working
-	 * @param URI
-	 * @return
-	 * @throws UnirestException
-	 */
-	public static Response jsonRetriever(String URI) throws UnirestException{
-		JSONArray jsonArray = new JSONArray();
-		HttpResponse<JsonNode> response =
-		Unirest.get("http://api.auroras.live/v1/" + URI)
-		 .header("cookie", "PHPSESSID=MW2MMg7reEHx0vQPXaKen0")
-		 .asJson();
-		jsonArray = response.getBody().getArray();
-		String att = "Powered by Auroras.live";
-		jsonArray.getJSONObject(jsonArray.length()-1).put("Attribution", att);
-		return Response.status(200).entity(response.getBody().toString()).build();
-	}
 	
 	/**
 	 * Retrieves the requested image from auroras.live APIs

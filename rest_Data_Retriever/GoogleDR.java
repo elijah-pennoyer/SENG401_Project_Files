@@ -12,6 +12,10 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+/**
+ * Receives URI from DataController. Sends HTTP request to Google Maps API. Receives API response.
+ * Sends response back to DataController.
+ */
 public class GoogleDR {
 	
 	/**

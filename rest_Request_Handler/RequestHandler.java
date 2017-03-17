@@ -1,5 +1,4 @@
 package rest_Request_Handler;
-import java.net.URI;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,9 +10,8 @@ import javax.ws.rs.core.UriInfo;
 import org.json.JSONObject;
 
 /**
- * Have functions for api module, will just "pass" the uri to the data controller
- * returns a json object.
- * 
+ * Decides which function to call in the DataController, then passes the URI to the DataController
+ * Returns a JSON object or jpeg image.
  */
 @Path ("/")
 public class RequestHandler{

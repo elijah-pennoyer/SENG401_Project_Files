@@ -34,12 +34,12 @@ public class RequestHandler{
 		
 		if(type.equals("embed") || (type.equals("images") && !queryParameters.containsKey("action"))){
 			if(queryParameters.containsKey("no-caching")){
-				List<String> cacheList = queryParameters.get("no-caching");
-				String cache = null;
-				if(cacheList != null && !cacheList.isEmpty()){
-					cache = cacheList.get(cacheList.size()-1);
+				List<String> noCacheList = queryParameters.get("no-caching");
+				String noCache = null;
+				if(noCacheList != null && !noCacheList.isEmpty()){
+					noCache = noCacheList.get(noCacheList.size()-1);
 					
-					if(cache.equals("true")){
+					if(noCache.equals("true")){
 						return cache_Controller.DataController.retrieveAuroraImage(query, false);
 					}
 				}
@@ -73,11 +73,11 @@ public class RequestHandler{
 					cache = cacheList.get(cacheList.size()-1);
 					
 					if(cache.equals("true")){
-						return cache_Controller.DataController.retreiveMap(id, false);
+						return cache_Controller.DataController.retrieveMap(id, false);
 					}
 				}
 			}
-			return cache_Controller.DataController.retreiveMap(id, true);
+			return cache_Controller.DataController.retrieveMap(id, true);
 		}
 		else{
 			if(queryParameters.containsKey("no-caching")){

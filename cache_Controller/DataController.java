@@ -12,9 +12,8 @@ import java.util.Properties;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
- * Receives URI info from RequestHandler. Passes URI to AuroraDR or GoogleDR.
- * Receives JSON object or image (HTTP response) from AuroraDR, or a map image from Google DR.
- * Passes the recieved JSON object or image back to RequestHandler.
+ * recieve uri info from request handler. pass uri to auroraDR.
+ * recieves json object (http response) from auroraDR. passes json object back to request handler.
  */
 public class DataController {
 	
@@ -54,7 +53,6 @@ public class DataController {
 		return null;
 	}
 	
-	//@Produces("application/json")
 	public static Response retrieveAuroraJSON(String URI, boolean doCaching){
 		try {
 			if(doCaching){
@@ -76,7 +74,7 @@ public class DataController {
 		return null;
 	}
 	
-	public static Response retreiveMap(String Location, boolean doCaching){
+	public static Response retrieveMap(String Location, boolean doCaching){
 		try {
 			if(doCaching){
 				cache = new HashMap<String, Object[]>();
@@ -151,5 +149,7 @@ public class DataController {
 				}
 			}
 		}
+		System.out.println(System.getProperty("user.dir"));
+		
 	}
 }

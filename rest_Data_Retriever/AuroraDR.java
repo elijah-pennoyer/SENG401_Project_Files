@@ -14,9 +14,8 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
- * receive uri from data controller. send http request to aurora api. receive api response.
- * sends response back to data controller.
- *
+ * Receives URI from DataController. Sends HTTP request to Aurora API. Receives API response.
+ * Sends response back to DataController.
  */
 public class AuroraDR {
 

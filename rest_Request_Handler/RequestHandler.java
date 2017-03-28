@@ -29,6 +29,7 @@ public class RequestHandler{
 		
 		if(!cache_Controller.DataController.cacheGoodToGo){
 			cache_Controller.DataController.cache = new HashMap<String, Object[]>();
+			cache_Controller.DataController.cacheGoodToGo = true;
 		}
 		
 		String query = uriInfo.getRequestUri().getQuery();

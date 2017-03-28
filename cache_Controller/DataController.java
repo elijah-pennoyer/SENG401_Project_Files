@@ -32,6 +32,9 @@ public class DataController {
 					Object[] temp = cache.get(URI);
 					if((long)temp[1]>System.currentTimeMillis()){
 						cacheHitCount++;
+						if(((Response)temp[0]).getStatus()==200){
+							((ByteArrayInputStream)((Response) temp[0]).getEntity()).reset();
+						}
 						return (Response)temp[0];
 					}
 				}

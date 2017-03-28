@@ -1,5 +1,4 @@
 package rest_Request_Handler;
-import java.net.URI;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -41,13 +40,13 @@ public class RequestHandler{
 				cache = cacheList.get(cacheList.size()-1);
 				
 				if(cache.equals("true")){
-					return cache_Controller.DataController.retrieveAuroraImage(query, true);
+					return cache_Controller.DataController.retrieveAuroraImage(query, false);
 				}
 			}
 			
 			//Call DataController.retrieveAuroraImage to retrieve the data, either from the Database 
 			//or by making a request to an API if the data isn't in the Database.
-			return cache_Controller.DataController.retrieveAuroraImage(query, false);
+			return cache_Controller.DataController.retrieveAuroraImage(query, true);
 		}
 		else if(type.equals("map")){
 			List<String> idList = queryParameters.get("id");

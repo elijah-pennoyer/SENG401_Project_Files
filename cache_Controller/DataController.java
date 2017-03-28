@@ -49,10 +49,10 @@ public class DataController {
 				prop.load(input);
 
 				if(prop.getProperty(URI) != null && !prop.getProperty(URI).equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty(URI));
+					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty(URI));
 				}
 				else if(prop.getProperty("images") != null && !prop.getProperty("images").equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty("images"));
+					cached[1] = new Long(System.currentTimeMillis() + Integer.parseInt(prop.getProperty("images")));
 				}
 				else{
 					//TODO pick a proper default
@@ -105,10 +105,10 @@ public class DataController {
 				prop.load(input);
 
 				if(prop.getProperty(URI) != null && !prop.getProperty(URI).equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty(URI));
+					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty(URI));
 				}
 				else if(prop.getProperty("json") != null && !prop.getProperty("json").equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty("json"));
+					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty("json"));
 				}
 				else{
 					//TODO pick a proper default
@@ -160,10 +160,10 @@ public class DataController {
 				prop.load(input);
 
 				if(prop.getProperty(Location) != null && !prop.getProperty(Location).equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty(Location));
+					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty(Location));
 				}
 				else if(prop.getProperty("map") != null && !prop.getProperty("map").equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty("map"));
+					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty("map"));
 				}
 				else{
 					//TODO pick a proper default

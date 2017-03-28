@@ -1,11 +1,11 @@
 package cache_Controller;
 
 import javax.ws.rs.core.Response;
+
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-//import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-//import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -14,7 +14,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 /**
  * Receives URI info from RequestHandler. Passes URI to AuroraDR or GoogleDR.
  * Receives JSON object or image (HTTP response) from AuroraDR, or a map image from Google DR.
- * Passes the recieved JSON object or image back to RequestHandler.
+ * Passes the received JSON object or image back to RequestHandler.
  */
 public class DataController {
 	
@@ -40,36 +40,10 @@ public class DataController {
 			Response rv = rest_Data_Retriever.AuroraDR.auroraAPI_ImageRetriever(URI);
 			Object[] cached = new Object[2];
 			cached[0] = rv;
-			Properties prop = new Properties();
-			InputStream input = null;
-			try {
-				input = new FileInputStream("config.properties");
-				
-				// load a properties file
-				prop.load(input);
-
-				if(prop.getProperty(URI) != null && !prop.getProperty(URI).equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty(URI));
-				}
-				else if(prop.getProperty("images") != null && !prop.getProperty("images").equals("")){
-					cached[1] = new Long(System.currentTimeMillis() + Integer.parseInt(prop.getProperty("images")));
-				}
-				else{
-					//TODO pick a proper default
-					cached[1] = System.currentTimeMillis() + 500;
-				}
-
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			} finally {
-				if (input != null) {
-					try {
-						input.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+			
+			cached[1] = getCacheTime(URI, "images");
+			System.out.println("retrieveAuroraImage cache time: " + cached[1]);
+			
 			cache.put(URI, cached);
 			return rv;
 		} catch (UnirestException e) {
@@ -79,7 +53,6 @@ public class DataController {
 		return null;
 	}
 	
-	//@Produces("application/json")
 	public static Response retrieveAuroraJSON(String URI, boolean doCaching){
 		try {
 			if(doCaching){
@@ -96,36 +69,10 @@ public class DataController {
 			Response rv = rest_Data_Retriever.AuroraDR.auroraAPI_JSONRetriever(URI);
 			Object[] cached = new Object[2];
 			cached[0] = rv;
-			Properties prop = new Properties();
-			InputStream input = null;
-			try {
-				input = new FileInputStream("config.properties");
-				
-				// load a properties file
-				prop.load(input);
-
-				if(prop.getProperty(URI) != null && !prop.getProperty(URI).equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty(URI));
-				}
-				else if(prop.getProperty("json") != null && !prop.getProperty("json").equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty("json"));
-				}
-				else{
-					//TODO pick a proper default
-					cached[1] = System.currentTimeMillis() + 500;
-				}
-
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			} finally {
-				if (input != null) {
-					try {
-						input.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+			
+			cached[1] = getCacheTime(URI,"json");
+			System.out.println("retrieveAuroraJSON cache time: " + cached[1]);
+			
 			cache.put(URI, cached);
 			return rv;
 		} catch (UnirestException e) {
@@ -143,6 +90,9 @@ public class DataController {
 					Object[] temp = cache.get(Location);
 					if((long)temp[1]<System.currentTimeMillis()){
 						cacheHitCount++;
+						
+						((ByteArrayInputStream)((Response) temp[0]).getEntity()).reset();
+						
 						return (Response)temp[0];
 					}
 				}
@@ -151,36 +101,10 @@ public class DataController {
 			Response rv = rest_Data_Retriever.GoogleDR.googleAPIRetriever(Location);
 			Object[] cached = new Object[2];
 			cached[0] = rv;
-			Properties prop = new Properties();
-			InputStream input = null;
-			try {
-				input = new FileInputStream("config.properties");
-				
-				// load a properties file
-				prop.load(input);
-
-				if(prop.getProperty(Location) != null && !prop.getProperty(Location).equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty(Location));
-				}
-				else if(prop.getProperty("map") != null && !prop.getProperty("map").equals("")){
-					cached[1] = System.currentTimeMillis() + Integer.parseInt(prop.getProperty("map"));
-				}
-				else{
-					//TODO pick a proper default
-					cached[1] = System.currentTimeMillis() + 500;
-				}
-
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			} finally {
-				if (input != null) {
-					try {
-						input.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+			
+			cached[1] = getCacheTime(Location, "map");
+			System.out.println("retrieveMap cache time: " + cached[1]);
+		
 			cache.put(Location, cached);
 			return rv;
 		} catch (UnirestException e) {
@@ -189,6 +113,58 @@ public class DataController {
 		}
 		return null;
 	}
+	
+	
+	/**
+	 * Get the cache time for the specified URI. If the URI isn't specified, get the default for
+	 * @param URI The URI that will be sent to Auroras.live or Google Maps API for object retrieval
+	 * @param objectType Either "json", "images" or "map"
+	 * @return The amount of time the object in the URI should be cached for
+	 */
+	private static Long getCacheTime(String URI, String objectType){
+		Properties prop = new Properties();
+		InputStream input = null;
+		try {
+			//Access input stream
+			input = new FileInputStream("config.properties");
+			
+			//Load the properties file
+			prop.load(input);
+			
+			//If the URI is special and has a specific cache time set by an admin, 
+			//return that value
+			if(prop.getProperty(URI) != null && !prop.getProperty(URI).equals("")){
+				return System.currentTimeMillis() + Integer.parseInt(prop.getProperty(URI));
+			}
+			//Else, find the objectType's cache time and return that value
+			else if(prop.getProperty(objectType) != null && !prop.getProperty(objectType).equals("")){
+				return System.currentTimeMillis() + Integer.parseInt(prop.getProperty(objectType));
+			}
+			//If neither the URI or the objectType are in the config file, return a default cache time
+			else{
+				//TODO pick a proper default
+				return System.currentTimeMillis() + 500;
+			}
+
+		//Exception handling and closing the input stream
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//Return default
+		//TODO pick a proper default
+		return System.currentTimeMillis() + 500;
+	}
+	
+	
 	/*
 	public static void main(String args[]){
 		//TODO credit this tutorial probably

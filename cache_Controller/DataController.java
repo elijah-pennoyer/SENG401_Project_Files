@@ -12,8 +12,9 @@ import java.util.Properties;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
- * receive uri info from request handler. pass uri to auroraDR.
- * receives json object (http response) from auroraDR. passes json object back to request handler.
+ * Receives URI info from RequestHandler. Passes URI to AuroraDR or GoogleDR.
+ * Receives JSON object or image (HTTP response) from AuroraDR, or a map image from Google DR.
+ * Passes the recieved JSON object or image back to RequestHandler.
  */
 public class DataController {
 	

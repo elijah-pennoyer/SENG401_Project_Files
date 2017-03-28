@@ -12,8 +12,8 @@ import java.util.Properties;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 /**
- * recieve uri info from request handler. pass uri to auroraDR.
- * recieves json object (http response) from auroraDR. passes json object back to request handler.
+ * receive uri info from request handler. pass uri to auroraDR.
+ * receives json object (http response) from auroraDR. passes json object back to request handler.
  */
 public class DataController {
 	
@@ -26,11 +26,12 @@ public class DataController {
 	public static long json;
 	
 	public static HashMap<String, Object[]> cache;
+	public static boolean cacheGoodToGo = false;
 	
 	public static Response retrieveAuroraImage(String URI, boolean doCaching){
 		try {
 			if(doCaching){
-				cache = new HashMap<String, Object[]>();
+				//cache = new HashMap<String, Object[]>();
 				if(cache.containsKey(URI)){
 					Object[] temp = cache.get(URI);
 					if((long)temp[1]<System.currentTimeMillis()){
@@ -53,10 +54,11 @@ public class DataController {
 		return null;
 	}
 	
+	//@Produces("application/json")
 	public static Response retrieveAuroraJSON(String URI, boolean doCaching){
 		try {
 			if(doCaching){
-				cache = new HashMap<String, Object[]>();
+				//cache = new HashMap<String, Object[]>();
 				if(cache.containsKey(URI)){
 					Object[] temp = cache.get(URI);
 					if((long)temp[1]<System.currentTimeMillis()){
@@ -74,10 +76,10 @@ public class DataController {
 		return null;
 	}
 	
-	public static Response retrieveMap(String Location, boolean doCaching){
+	public static Response retreiveMap(String Location, boolean doCaching){
 		try {
 			if(doCaching){
-				cache = new HashMap<String, Object[]>();
+				//cache = new HashMap<String, Object[]>();
 				if(cache.containsKey(Location)){
 					Object[] temp = cache.get(Location);
 					if((long)temp[1]<System.currentTimeMillis()){
@@ -149,7 +151,5 @@ public class DataController {
 				}
 			}
 		}
-		System.out.println(System.getProperty("user.dir"));
-		
 	}
 }

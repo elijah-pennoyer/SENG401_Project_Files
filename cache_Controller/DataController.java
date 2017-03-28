@@ -51,7 +51,7 @@ public class DataController {
 				if(prop.getProperty(URI) != null && !prop.getProperty(URI).equals("")){
 					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty(URI));
 				}
-				else if(prop.getProperty("images") != null && prop.getProperty("images").equals("")){
+				else if(prop.getProperty("images") != null && !prop.getProperty("images").equals("")){
 					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty("images"));
 				}
 				else{
@@ -107,7 +107,7 @@ public class DataController {
 				if(prop.getProperty(URI) != null && !prop.getProperty(URI).equals("")){
 					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty(URI));
 				}
-				else if(prop.getProperty("json") != null && prop.getProperty("json").equals("")){
+				else if(prop.getProperty("json") != null && !prop.getProperty("json").equals("")){
 					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty("json"));
 				}
 				else{
@@ -162,7 +162,7 @@ public class DataController {
 				if(prop.getProperty(Location) != null && !prop.getProperty(Location).equals("")){
 					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty(Location));
 				}
-				else if(prop.getProperty("map") != null && prop.getProperty("map").equals("")){
+				else if(prop.getProperty("map") != null && !prop.getProperty("map").equals("")){
 					cached[1] = System.currentTimeMillis() + Integer.getInteger(prop.getProperty("map"));
 				}
 				else{

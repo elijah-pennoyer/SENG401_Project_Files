@@ -43,11 +43,9 @@ public class RequestHandler{
 						return cache_Controller.DataController.retrieveAuroraImage(query, false);
 					}
 				}
-				
-				//Call DataController.retrieveAuroraImage to retrieve the data, either from the Database 
-				//or by making a request to an API if the data isn't in the Database.
-				return cache_Controller.DataController.retrieveAuroraImage(query, true);
 			}
+			//Call DataController.retrieveAuroraImage to retrieve the data, either from the Database 
+			//or by making a request to an API if the data isn't in the Database.
 			return cache_Controller.DataController.retrieveAuroraImage(query, true);	
 		}
 		else if(type.equals("map")){
@@ -68,10 +66,32 @@ public class RequestHandler{
 				jsonObject.put("statuscode", status);
 				return Response.status(200).type("application/json").entity(jsonObject.toString()).build();
 			}
-			return cache_Controller.DataController.retreiveMap(id, false);
+			if(queryParameters.containsKey("no-caching")){
+				List<String> cacheList = queryParameters.get("no-caching");
+				String cache = null;
+				if(cacheList != null && !cacheList.isEmpty()){
+					cache = cacheList.get(cacheList.size()-1);
+					
+					if(cache.equals("true")){
+						return cache_Controller.DataController.retreiveMap(id, false);
+					}
+				}
+			}
+			return cache_Controller.DataController.retreiveMap(id, true);
 		}
 		else{
-			return cache_Controller.DataController.retrieveAuroraJSON(query, false);
+			if(queryParameters.containsKey("no-caching")){
+				List<String> cacheList = queryParameters.get("no-caching");
+				String cache = null;
+				if(cacheList != null && !cacheList.isEmpty()){
+					cache = cacheList.get(cacheList.size()-1);
+					
+					if(cache.equals("true")){
+						return cache_Controller.DataController.retrieveAuroraJSON(query, false);
+					}
+				}
+			}
+			return cache_Controller.DataController.retrieveAuroraJSON(query, true);
 		}
 		
 	}

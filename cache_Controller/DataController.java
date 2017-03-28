@@ -90,8 +90,9 @@ public class DataController {
 					Object[] temp = cache.get(Location);
 					if((long)temp[1]>System.currentTimeMillis()){
 						cacheHitCount++;
-						System.out.println("YAY");
-						((ByteArrayInputStream)((Response) temp[0]).getEntity()).reset();
+						if(((Response)temp[0]).getStatus()==200){
+							((ByteArrayInputStream)((Response) temp[0]).getEntity()).reset();
+						}
 						return (Response)temp[0];
 					}
 				}

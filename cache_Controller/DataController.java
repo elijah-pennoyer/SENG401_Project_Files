@@ -30,7 +30,7 @@ public class DataController {
 				//cache = new HashMap<String, Object[]>();
 				if(cache.containsKey(URI)){
 					Object[] temp = cache.get(URI);
-					if((long)temp[1]<System.currentTimeMillis()){
+					if((long)temp[1]>System.currentTimeMillis()){
 						cacheHitCount++;
 						return (Response)temp[0];
 					}
@@ -59,7 +59,7 @@ public class DataController {
 				//cache = new HashMap<String, Object[]>();
 				if(cache.containsKey(URI)){
 					Object[] temp = cache.get(URI);
-					if((long)temp[1]<System.currentTimeMillis()){
+					if((long)temp[1]>System.currentTimeMillis()){
 						cacheHitCount++;
 						return (Response)temp[0];
 					}
@@ -88,11 +88,10 @@ public class DataController {
 				//cache = new HashMap<String, Object[]>();
 				if(cache.containsKey(Location)){
 					Object[] temp = cache.get(Location);
-					if((long)temp[1]<System.currentTimeMillis()){
+					if((long)temp[1]>System.currentTimeMillis()){
 						cacheHitCount++;
-						
+						System.out.println("YAY");
 						((ByteArrayInputStream)((Response) temp[0]).getEntity()).reset();
-						
 						return (Response)temp[0];
 					}
 				}

@@ -33,11 +33,21 @@ public class RequestHandler{
 		List<String> typeList = queryParameters.get("type");
 		String type = typeList.get(typeList.size()-1);
 		
-		if(type.equals("embed") || (type.equals("images") && !queryParameters.containsKey("action"))){
+		if((type.equals("embed") || (type.equals("images") && !queryParameters.containsKey("action"))) && queryParameters.containsKey("no-caching")){
+			
+			List<String> cacheList = queryParameters.get("no-caching");
+			String cache = null;
+			if(cacheList != null && !cacheList.isEmpty()){
+				cache = cacheList.get(cacheList.size()-1);
+				
+				if(cache.equals("true")){
+					return cache_Controller.DataController.retrieveAuroraImage(query, true);
+				}
+			}
 			
 			//Call DataController.retrieveAuroraImage to retrieve the data, either from the Database 
 			//or by making a request to an API if the data isn't in the Database.
-			return cache_Controller.DataController.retrieveAuroraImage(query);
+			return cache_Controller.DataController.retrieveAuroraImage(query, false);
 		}
 		else if(type.equals("map")){
 			List<String> idList = queryParameters.get("id");
@@ -57,10 +67,10 @@ public class RequestHandler{
 				jsonObject.put("statuscode", status);
 				return Response.status(200).type("application/json").entity(jsonObject.toString()).build();
 			}
-			return cache_Controller.DataController.retreiveMap(id);
+			return cache_Controller.DataController.retreiveMap(id, false);
 		}
 		else{
-			return cache_Controller.DataController.retrieveAuroraJSON(query);
+			return cache_Controller.DataController.retrieveAuroraJSON(query, false);
 		}
 		
 	}

@@ -1,4 +1,5 @@
 package rest_Request_Handler;
+import java.util.HashMap;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -25,6 +26,10 @@ public class RequestHandler{
 	@GET
 	@Produces({"image/jpeg", "application/json"})
 	public Response handleRequest(@Context UriInfo uriInfo){
+		
+		if(!cache_Controller.DataController.cacheGoodToGo){
+			cache_Controller.DataController.cache = new HashMap<String, Object[]>();
+		}
 		
 		String query = uriInfo.getRequestUri().getQuery();
 		

@@ -76,7 +76,7 @@ public class DataController {
 		return null;
 	}
 	
-	public static Response retreiveMap(String Location, boolean doCaching){
+	public static Response retrieveMap(String Location, boolean doCaching){
 		try {
 			if(doCaching){
 				//cache = new HashMap<String, Object[]>();

@@ -1,4 +1,5 @@
 package rest_Request_Handler;
+import java.net.URI;
 import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

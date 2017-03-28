@@ -73,8 +73,6 @@ public class GoogleDR {
 	 * @throws UnirestException
 	 */
 	private static JSONArray locationsJSONRetriever() throws UnirestException{
-		
-
 		JSONArray jsonArray = new JSONArray();
 		
 		HttpResponse<JsonNode> response =

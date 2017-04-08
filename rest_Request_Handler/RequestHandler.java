@@ -122,6 +122,11 @@ public class RequestHandler{
 			return cache_Controller.DataController.retrieveMap(id, true);
 		}
 		
+		//if the expected return type is cache information
+		else if(type.equals("cacheInfo")){
+			return cache_Controller.DataController.getCacheInfo();
+		}
+		
 		//if the expected return type is a JSON object
 		else{
 			//if the user specified a "no-caching" parameter

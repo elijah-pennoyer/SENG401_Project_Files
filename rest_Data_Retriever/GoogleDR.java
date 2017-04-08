@@ -44,7 +44,7 @@ public class GoogleDR {
 		}
 		
 		//Error handling - If the location is not found, then return an error message
-		if(!id.equals(location)){
+		if(id == null || !id.equals(location)){
 			JSONObject jsonObject = new JSONObject();
 			String module = "map";
 			jsonObject.put("module", module);
@@ -60,6 +60,7 @@ public class GoogleDR {
 		//Create string to add marker to the map, using latitude and longitude
 		String markerString = "&markers=color:blue%7C" + latLongString;
 		
+		//Send HTTP request the Google Maps API and return the response
 		HttpResponse<InputStream> response =
 		Unirest.get("https://maps.googleapis.com/maps/api/staticmap?center=" + latLongString + markerString + "&zoom=13&size=1920x10800&key=AIzaSyBTQ67ylZO2ayd8rH_c1rzDkDlf2QoQTBs")
 		 .header("cookie", "PHPSESSID=MW2MMg7reEHx0vQPXaKen0").asBinary();
@@ -75,11 +76,13 @@ public class GoogleDR {
 	private static JSONArray locationsJSONRetriever() throws UnirestException{
 		JSONArray jsonArray = new JSONArray();
 		
+		//Send HTTP request for locations to Auroras.live
 		HttpResponse<JsonNode> response =
 		Unirest.get("http://api.auroras.live/v1/?type=locations")
 		 .header("cookie", "PHPSESSID=MW2MMg7reEHx0vQPXaKen0")
 		 .asJson();
 		
+		//if the response is good, return it. Else return null
 		int status = response.getStatus();
 		if(status == 200){
 			jsonArray = response.getBody().getArray();

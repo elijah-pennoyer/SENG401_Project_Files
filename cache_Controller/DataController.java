@@ -242,13 +242,7 @@ public class DataController {
 	
 	public static Response getCacheInfo(){
 		//return error message to the user detailing that they have not enetered any "id" parameters
-		JSONObject jsonObject = new JSONObject();
-		String module = "Main";
-		jsonObject.put("module", module);
 		String message = "Number of cache hits since last cache clear: " + cacheHitCount + ", Number of cache misses since last cache clear: " + cacheMissCount;
-		jsonObject.put("message", message);
-		int status = 200;
-		jsonObject.put("statuscode", status);
-		return Response.status(200).type("application/json").entity(jsonObject.toString()).build();
+		return Response.status(200).type("application/json").entity(message).build();
 	}
 }

@@ -48,12 +48,16 @@ public class DataController {
 						//successful cache retreival
 						cacheHitCount++;
 						//if the cached object has a status code of 200
-						if(((Response)temp[0]).getStatus()==200){
+						//if(((Response)temp[0]).getStatus()==200){
 							//reset the image's ByteArrayInputStream so it can be read again
-							((ByteArrayInputStream)((Response) temp[0]).getEntity()).reset();
-						}
+							//((ByteArrayInputStream)((Response) temp[0]).getEntity()).reset();
+						//}
 						//retrun the cached object
-						return (Response)temp[0];
+						//return (Response)temp[0];
+						if(((Integer)(((Object[])temp[0])[0])).equals(200)){
+							return Response.status(200).type("image/jpeg").entity(new ByteArrayInputStream(((byte[])(((Object[])temp[0])[1])))).build();
+						}
+						return Response.status(((Integer)(((Object[])temp[0])[0]))).type("application/json").entity(((Object[])temp[0])[1]).build();
 					}
 				}
 			}
@@ -66,7 +70,33 @@ public class DataController {
 			//prepare to cache the image
 			//create an array to hold the image at its expirery time
 			Object[] cached = new Object[2];
-			cached[0] = rv;
+			Object[] thisIsCrazy = new Object[2];
+			byte[] b = new byte[100000];
+			try {
+				System.out.println(((ByteArrayInputStream)rv.getEntity()).read(b));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/*if(rv.getStatus() == 200){
+				cached[0] = Response.status(200).type("image/jpeg").entity(new ByteArrayInputStream(b)).build();
+			}
+			else{
+				cached[0] = Response.status(rv.getStatus()).type("application/json").entity(rv.getEntity()).build();
+			}*/
+			
+			/*if(((Response)cached[0]).getStatus()==200){
+				//reset the image's ByteArrayInputStream so it can be read again
+				((ByteArrayInputStream)((Response) cached[0]).getEntity()).reset();
+			}*/
+			thisIsCrazy[0] = rv.getStatus();
+			if(rv.getStatus() == 200){
+				thisIsCrazy[1] = b;
+			}
+			else{
+				thisIsCrazy[1] = rv.getEntity();
+			}
+			cached[0] = thisIsCrazy;
 			
 			//retreive the appropriate cache time from the system config file
 			cached[1] = getCacheTime(URI, "images");
@@ -74,6 +104,7 @@ public class DataController {
 			//cache the array
 			cache.put(URI, cached);
 			//return the image
+			((ByteArrayInputStream)rv.getEntity()).reset();
 			return rv;
 			
 		} catch (UnirestException e) {

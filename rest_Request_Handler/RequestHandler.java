@@ -44,7 +44,7 @@ public class RequestHandler{
 		//Retrieve all parameters corresponding to "type"
 		List<String> typeList = queryParameters.get("type");
 		//error check the user has entered a type parameter
-		if(typeList.isEmpty() || typeList == null){
+		if(typeList == null || typeList.isEmpty()){
 			//return error message to the user detailing that they have not entered any "type" parameters
 			JSONObject jsonObject = new JSONObject();
 			String module = "Main";

@@ -44,7 +44,7 @@ public class AuroraDR {
 		//get the status of the response from Auroras.live
 		int status = response.getStatus();
 		
-		//based on status the response will be of different types, return a response of the approriate type
+		//based on status the response will be of different types, return a response of the appropriate type
 		if(status == 200){
 			return Response.status(200).type("image/jpeg").entity(response.getBody()).build();
 		}
@@ -60,7 +60,7 @@ public class AuroraDR {
 	 * Retrieves the requested JSON object from auroras.live APIs
 	 * @param URI Query parameters needed in retrieving the desired object
 	 * @return auroras.live API response
-	 * @throws UnirestException If there was an error when sending the http request to auroras.live
+	 * @throws UnirestException If there was an error when sending the HTTP request to auroras.live
 	 */
 	public static Response auroraAPI_JSONRetriever(String URI) throws UnirestException{
 		JSONArray jsonArray = new JSONArray();

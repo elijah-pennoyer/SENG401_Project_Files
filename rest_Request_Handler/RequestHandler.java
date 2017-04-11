@@ -36,16 +36,16 @@ public class RequestHandler{
 			cache_Controller.DataController.cacheGoodToGo = true;
 		}
 		
-		//retreive the entire URI query (ex. type=XXX&action=YYY&ZZZ=AAA)
+		//Retrieve the entire URI query (ex. type=XX&action=YYY&ZZZ=AAA)
 		String query = uriInfo.getRequestUri().getQuery();
 		
-		//parse the URI into its component query parameters (ex. type=XXX)
+		//parse the URI into its component query parameters (ex. type=XX)
 		MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
-		//retreive all parameters corresponding to "type"
+		//Retrieve all parameters corresponding to "type"
 		List<String> typeList = queryParameters.get("type");
 		//error check the user has entered a type parameter
 		if(typeList.isEmpty() || typeList == null){
-			//return error message to the user detailing that they have not enetered any "type" parameters
+			//return error message to the user detailing that they have not entered any "type" parameters
 			JSONObject jsonObject = new JSONObject();
 			String module = "Main";
 			jsonObject.put("module", module);
@@ -55,20 +55,20 @@ public class RequestHandler{
 			jsonObject.put("statuscode", status);
 			return Response.status(200).type("application/json").entity(jsonObject.toString()).build();
 		}
-		//retreive the last type parameter input by the user
+		//Retrieve the last type parameter input by the user
 		String type = typeList.get(typeList.size()-1);
 		
 		//if the return type is expected to be an image
 		if(type.equals("embed") || (type.equals("images") && !queryParameters.containsKey("action"))){
 			//if the user has specified a no caching parameter
 			if(queryParameters.containsKey("no-caching")){
-				//retreive the last no-caching parameter specified by the user
+				//Retrieve the last no-caching parameter specified by the user
 				List<String> noCacheList = queryParameters.get("no-caching");
 				String noCache = null;
 				if(noCacheList != null && !noCacheList.isEmpty()){
 					noCache = noCacheList.get(noCacheList.size()-1);
 					
-					//if the retreived parameter specifies "true"
+					//if the retrieved parameter specifies "true"
 					//Call DataController.retrieveAuroraImage to retrieve the data by making a request to an API.
 					if(noCache.equals("true")){
 						return cache_Controller.DataController.retrieveAuroraImage(query, false);
@@ -91,7 +91,7 @@ public class RequestHandler{
 			}
 			//if no "id" parameter was specified
 			else{
-				//return error message to the user detailing that they have not enetered any "id" parameters
+				//return error message to the user detailing that they have not entered any "id" parameters
 				JSONObject jsonObject = new JSONObject();
 				String module = "Map";
 				jsonObject.put("module", module);
@@ -109,7 +109,7 @@ public class RequestHandler{
 				if(cacheList != null && !cacheList.isEmpty()){
 					cache = cacheList.get(cacheList.size()-1);
 					
-					//if the retreived parameter has been specified as "true"
+					//if the retrieved parameter has been specified as "true"
 					//Call DataController.retrieveMap to retrieve the data by making a request to an API.
 					if(cache.equals("true")){
 						return cache_Controller.DataController.retrieveMap(id, false);
@@ -137,7 +137,7 @@ public class RequestHandler{
 				if(cacheList != null && !cacheList.isEmpty()){
 					cache = cacheList.get(cacheList.size()-1);
 					
-					//if the retreived parameter has been specified as "true"
+					//if the retrieved parameter has been specified as "true"
 					//Call DataController.retrieveAuroraJSON to retrieve the data by making a request to an API.
 					if(cache.equals("true")){
 						return cache_Controller.DataController.retrieveAuroraJSON(query, false);

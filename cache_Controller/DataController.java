@@ -1,6 +1,5 @@
 package cache_Controller;
 
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.Set;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -22,7 +20,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  */
 public class DataController {
 	
-	//integers to track the number of cache hits (successful cache retreivals) and misses (unsuccessful cache retreivals)
+	//integers to track the number of cache hits (successful cache retrievals) and misses (unsuccessful cache retrievals)
 	private static long cacheHitCount;
 	private static long cacheMissCount;
 	
@@ -33,7 +31,7 @@ public class DataController {
 	public static boolean cacheGoodToGo = false;
 	
 	/**
-	 * Retreives a JPEG image from Auroras.live or the cache
+	 * Retrieves a JPEG image from Auroras.live or the cache
 	 * @param URI URI of the requested image
 	 * @param doCaching Boolean to indicate whether or not the image should be cached/retreived from the cache
 	 * @return Requested Auroras.live image
@@ -45,48 +43,53 @@ public class DataController {
 				//if the image corresponding to the input URI is stored in the cache
 				if(cache.containsKey(URI)){
 					Object[] temp = cache.get(URI);
-					//if the expirery time of the object stored in the cache has not yet passed
+					//if the expiry time of the object stored in the cache has not yet passed
 					if((long)temp[1]>System.currentTimeMillis()){
-						//successful cache retreival
+						//successful cache retrieval
 						cacheHitCount++;
 						//if the cached object has a status code of 200
-						//retrun the cached object
 						if(((Integer)(((Object[])temp[0])[0])).equals(200)){
+							//return an image response using the cached byte array
 							return Response.status(200).type("image/jpeg").entity(new ByteArrayInputStream(((byte[])(((Object[])temp[0])[1])))).build();
 						}
+						//if the status is not 200, return a JSON response using the stored entity object
 						return Response.status(((Integer)(((Object[])temp[0])[0]))).type("application/json").entity(((Object[])temp[0])[1]).build();
 					}
 				}
 			}
 			//if caching is not enabled or the object is not found in the cache or the cached object is expired
-			//unsuccessful cache retreival
+			//unsuccessful cache retrieval
 			cacheMissCount++;
-			//retreive the image from Auroras.live
+			//Retrieve the image from Auroras.live
 			Response rv = rest_Data_Retriever.AuroraDR.auroraAPI_ImageRetriever(URI);
 			
 			//prepare to cache the image
-			//create an array to hold the image at its expirery time
+			//create an array to hold the image at its expiry time
 			Object[] cached = new Object[2];
-			Object[] thisIsCrazy = new Object[2];
-			thisIsCrazy[0] = rv.getStatus();
+			//create an array to store the image payload
+			Object[] entityData = new Object[2];
+			//store the response status, if the status is 200 the response is an image, else it is JSON
+			entityData[0] = rv.getStatus();
 			if(rv.getStatus() == 200){
-				System.out.println(((ByteArrayInputStream)rv.getEntity()).available());
+				//store the image's ByteArrayInputStream entity into a byte[]
 				byte[] b = new byte[((ByteArrayInputStream)rv.getEntity()).available()];
 				try {
-					System.out.println(((ByteArrayInputStream)rv.getEntity()).read(b));
+					((ByteArrayInputStream)rv.getEntity()).read(b);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//ignore exception
 				}
-				thisIsCrazy[1] = b;
+				//store the byte array
+				entityData[1] = b;
+				//reset the input stream
 				((ByteArrayInputStream)rv.getEntity()).reset();
 			}
+			//if the payload is not an image, save the entity
 			else{
-				thisIsCrazy[1] = rv.getEntity();
+				entityData[1] = rv.getEntity();
 			}
-			cached[0] = thisIsCrazy;
+			cached[0] = entityData;
 			
-			//retreive the appropriate cache time from the system config file
+			//Retrieve the appropriate cache time from the system config file
 			cached[1] = getCacheTime(URI, "images");
 			
 			//cache the array
@@ -96,7 +99,7 @@ public class DataController {
 			
 		} catch (UnirestException e) {
 			//ignore any exceptions thrown
-			//return error message to the user detailing that they have not enetered any "id" parameters
+			//return error message to the user detailing that they have not entered any "id" parameters
 			JSONObject jsonObject = new JSONObject();
 			String module = "Main";
 			jsonObject.put("module", module);
@@ -115,22 +118,22 @@ public class DataController {
 				//if the JSON corresponding to the input URI is stored in the cache
 				if(cache.containsKey(URI)){
 					Object[] temp = cache.get(URI);
-					//if the expirery time of the object stored in the cache has not yet passed
+					//if the expiry time of the object stored in the cache has not yet passed
 					if((long)temp[1]>System.currentTimeMillis()){
-						//successful cache retreival, retrun the cached object
+						//successful cache retrieval, return the cached object
 						cacheHitCount++;
 						return (Response)temp[0];
 					}
 				}
 			}
 			//if caching is not enabled or the object is not found in the cache or the cached object is expired
-			//unsuccessful cache retreival
+			//unsuccessful cache retrieval
 			cacheMissCount++;
-			//retreive the JSON from Auroras.live
+			//Retrieve the JSON from Auroras.live
 			Response rv = rest_Data_Retriever.AuroraDR.auroraAPI_JSONRetriever(URI);
 			
 			//prepare to cache the JSON
-			//create an array to hold the JSON at its expirery time
+			//create an array to hold the JSON at its expiry time
 			Object[] cached = new Object[2];
 			cached[0] = rv;
 			
@@ -144,7 +147,7 @@ public class DataController {
 			
 		} catch (UnirestException e) {
 			//ignore any exceptions thrown
-			//return error message to the user detailing that they have not enetered any "id" parameters
+			//return error message to the user detailing that they have not entered any "id" parameters
 			JSONObject jsonObject = new JSONObject();
 			String module = "Main";
 			jsonObject.put("module", module);
@@ -163,48 +166,53 @@ public class DataController {
 				//if the map image corresponding to the input Location ID is stored in the cache
 				if(cache.containsKey(Location)){
 					Object[] temp = cache.get(Location);
-					//if the expirery time of the object stored in the cache has not yet passed
+					//if the expiry time of the object stored in the cache has not yet passed
 					if((long)temp[1]>System.currentTimeMillis()){
-						//successful cache retreival
+						//successful cache retrieval
 						cacheHitCount++;
 						//if the cached object has a status code of 200
-						//retrun the cached object
 						if(((Integer)(((Object[])temp[0])[0])).equals(200)){
+							//return an image response using the cached byte array
 							return Response.status(200).type("image/jpeg").entity(new ByteArrayInputStream(((byte[])(((Object[])temp[0])[1])))).build();
 						}
+						//if the status is not 200, return a JSON response using the stored entity object
 						return Response.status(((Integer)(((Object[])temp[0])[0]))).type("application/json").entity(((Object[])temp[0])[1]).build();
 					}
 				}
 			}
 			//if caching is not enabled or the object is not found in the cache or the cached object is expired
-			//unsuccessful cache retreival
+			//unsuccessful cache retrieval
 			cacheMissCount++;
-			//retreive the map image from Google
+			//Retrieve the map image from Google
 			Response rv = rest_Data_Retriever.GoogleDR.googleAPIRetriever(Location);
 			
 			//prepare to cache the map image
-			//create an array to hold the map image at its expirery time
+			//create an array to hold the map image at its expiry time
 			Object[] cached = new Object[2];
-			Object[] thisIsCrazy = new Object[2];
-			thisIsCrazy[0] = rv.getStatus();
+			//create an array to store the map image payload
+			Object[] entityData = new Object[2];
+			//store the response status, if the status is 200 the response is a map image, else it is JSON
+			entityData[0] = rv.getStatus();
 			if(rv.getStatus() == 200){
-				System.out.println(((ByteArrayInputStream)rv.getEntity()).available());
+				//store the image's ByteArrayInputStream entity into a byte[]
 				byte[] b = new byte[((ByteArrayInputStream)rv.getEntity()).available()];
 				try {
-					System.out.println(((ByteArrayInputStream)rv.getEntity()).read(b));
+					((ByteArrayInputStream)rv.getEntity()).read(b);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//ignore exception
 				}
-				thisIsCrazy[1] = b;
+				//store the byte array
+				entityData[1] = b;
+				//reset the input stream
 				((ByteArrayInputStream)rv.getEntity()).reset();
 			}
+			//if the payload is not an image, save the entity
 			else{
-				thisIsCrazy[1] = rv.getEntity();
+				entityData[1] = rv.getEntity();
 			}
-			cached[0] = thisIsCrazy;
+			cached[0] = entityData;
 			
-			//retreive the appropriate cache time from the system config file
+			//Retrieve the appropriate cache time from the system config file
 			cached[1] = getCacheTime(Location, "map");
 		
 			//cache the array
@@ -214,7 +222,7 @@ public class DataController {
 			
 		} catch (UnirestException e) {
 			//ignore any exceptions thrown
-			//return error message to the user detailing that they have not enetered any "id" parameters
+			//return error message to the user detailing that they have not entered any "id" parameters
 			JSONObject jsonObject = new JSONObject();
 			String module = "Main";
 			jsonObject.put("module", module);
@@ -275,7 +283,7 @@ public class DataController {
 	}
 	
 	public static Response getCacheInfo(){
-		//return error message to the user detailing that they have not enetered any "id" parameters
+		//return error message to the user detailing that they have not entered any "id" parameters
 		String message = "Number of cache hits since last cache clear: " + cacheHitCount + ", Number of cache misses since last cache clear: " + cacheMissCount;
 		return Response.status(200).type("application/json").entity(message).build();
 	}

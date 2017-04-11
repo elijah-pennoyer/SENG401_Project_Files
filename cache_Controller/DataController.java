@@ -1,5 +1,6 @@
 package cache_Controller;
 
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Set;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -71,7 +73,9 @@ public class DataController {
 			//create an array to hold the image at its expirery time
 			Object[] cached = new Object[2];
 			Object[] thisIsCrazy = new Object[2];
-			byte[] b = new byte[100000];
+			MultivaluedMap<String, Object> m = rv.getMetadata();
+			System.out.println(((ByteArrayInputStream)rv.getEntity()).available());
+			byte[] b = new byte[((ByteArrayInputStream)rv.getEntity()).available()];
 			try {
 				System.out.println(((ByteArrayInputStream)rv.getEntity()).read(b));
 			} catch (IOException e) {
